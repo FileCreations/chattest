@@ -2,6 +2,20 @@ param (
     [string]$filePath
 )
 
+# Function to check if running as Administrator
+function Test-Administrator {
+    $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = New-Object Security.Principal.WindowsPrincipal($currentUser)
+    return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
+
+# If not running as Administrator, relaunch the script with elevated privileges
+if (-not (Test-Administrator)) {
+    Write-Host "Requesting administrative privileges..."
+    Start-Process powershell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`" -filePath `"$filePath`"" -Verb RunAs
+    exit
+}
+
 try {
     # Start the TrustedInstaller service (Windows Modules Installer) if it's not running
     $serviceName = 'TrustedInstaller'
