@@ -11,11 +11,17 @@ function Set-Permissions {
         [string]$Permissions
     )
 
-    $acl = Get-Acl -Path $Path
-    $rule = New-Object System.Security.AccessControl.FileSystemAccessRule($Account, $Permissions, "ContainerInherit,ObjectInherit", "None", "Allow")
+    try {
+        $acl = Get-Acl -Path $Path
+        $rule = New-Object System.Security.AccessControl.FileSystemAccessRule($Account, $Permissions, "ContainerInherit,ObjectInherit", "None", "Allow")
 
-    $acl.SetAccessRule($rule)
-    Set-Acl -Path $Path -AclObject $acl
+        $acl.SetAccessRule($rule)
+        Set-Acl -Path $Path -AclObject $acl
+
+        Write-Host "Permissions changed successfully for '$Path'."
+    } catch {
+        Write-Host "An error occurred: $_"
+    }
 }
 
 Write-Host "Select the permission level for '$Path':"
@@ -47,4 +53,4 @@ switch ($selection) {
     }
 }
 
-Write-Host "Permissions changed for '$Path'."
+Read-Host "Press Enter to exit..."
