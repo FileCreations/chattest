@@ -1,9 +1,0 @@
-Windows Registry Editor Version 5.00
-
-[HKEY_LOCAL_MACHINE\Software\Classes\exefile\shell\runas_system]
-@="Run as SYSTEM"
-"NoWorkingDirectory"=""
-"Icon"="%SystemRoot%\\System32\\shell32.dll,15"
-
-[HKEY_LOCAL_MACHINE\Software\Classes\exefile\shell\runas_system\command]
-@="powershell.exe -NoExit -command \"try { if ((Read-Host 'Are you sure you want to run this as SYSTEM? (Y/N)').ToUpper() -eq 'Y') { Start-Process -FilePath 'C:\\Windows\\System32\\psexec.exe' -ArgumentList '-s', '-i', '%1' -Wait } } catch { Write-Host 'Error: ' $_.Exception.Message } finally { pause }\""
