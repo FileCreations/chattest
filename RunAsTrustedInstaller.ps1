@@ -21,8 +21,8 @@ if ($service -and $service.Status -ne 'Running') {
 # Confirm with the user
 $confirmation = Read-Host "Are you sure you want to run $filePath as TrustedInstaller? (Y/N)"
 if ($confirmation -eq "Y") {
-    # Run the file as TrustedInstaller using PsExec with TrustedInstaller context
-    Start-Process -FilePath "psexec.exe" -ArgumentList "-accepteula -i -s -d -u TrustedInstaller `"$filePath`"" -NoNewWindow -Wait
+    # Run the file as TrustedInstaller using PsExec
+    Start-Process -FilePath "psexec.exe" -ArgumentList "-accepteula -i -s -u NT AUTHORITY\\TrustedInstaller \"$filePath\"" -NoNewWindow -Wait
 } else {
     Write-Host "Operation canceled."
 }
