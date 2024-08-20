@@ -14,8 +14,8 @@ $confirmation = Read-Host "Are you sure you want to run $filePath as TrustedInst
 if ($confirmation -eq "Y") {
     # Run the file as TrustedInstaller using PsExec
     $psexecPath = "C:\Windows\System32\psexec.exe"
-    $command = "`"$psexecPath`" -accepteula -i -s -u `NT AUTHORITY\TrustedInstaller` `"$filePath`""
-    Invoke-Expression $command
+    $arguments = "-accepteula -s -u `NT AUTHORITY\TrustedInstaller` -i `"$filePath`""
+    Start-Process -FilePath $psexecPath -ArgumentList $arguments -NoNewWindow -Wait
 } else {
     Write-Host "Operation canceled."
 }
