@@ -9,21 +9,13 @@ if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
     exit
 }
 
-# Start the TrustedInstaller service (Windows Modules Installer) if it's not running
-$serviceName = 'TrustedInstaller'
-$service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
-
-if ($service -and $service.Status -ne 'Running') {
-    Start-Service -Name $serviceName
-    Write-Host "Starting the TrustedInstaller service..."
-}
-
 # Confirm with the user
 $confirmation = Read-Host "Are you sure you want to run $filePath as TrustedInstaller? (Y/N)"
 if ($confirmation -eq "Y") {
     # Run the file as TrustedInstaller using PsExec
-    $arguments = "-accepteula -i -s -u `NT AUTHORITY\TrustedInstaller` `"$filePath`""
-    Start-Process -FilePath "psexec.exe" -ArgumentList $arguments -NoNewWindow -Wait
+    $psexecPath = "C:\Windows\System32\psexec.exe"
+    $command = "`"$psexecPath`" -accepteula -i -s -u `NT AUTHORITY\TrustedInstaller` `"$filePath`""
+    Invoke-Expression $command
 } else {
     Write-Host "Operation canceled."
 }
