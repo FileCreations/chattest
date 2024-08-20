@@ -50,6 +50,13 @@ function Remove-Permissions {
     try {
         $acl = Get-Acl -Path $Path
 
+        # Disable inheritance and copy existing inherited rules
+        if ($acl.AreAccessRulesProtected -eq $false) {
+            $acl.SetAccessRuleProtection($true, $true)
+            Write-Log "Inheritance disabled for '$Path'."
+            Write-Host "Inheritance disabled for '$Path'."
+        }
+
         # Remove access rules for the account
         $acl.Access | ForEach-Object {
             if ($_.IdentityReference -eq $Account) {
