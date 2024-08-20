@@ -1,0 +1,9 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\*\shell\ChangePermissions]
+@="Change Permissions"
+"Icon"="imageres.dll,-5302"
+"HasLUAShield"=""
+
+[HKEY_CLASSES_ROOT\*\shell\ChangePermissions\command]
+@="powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"C:\\Windows\\System32\\ChangePermissions.ps1\" -Path \"%1\""
