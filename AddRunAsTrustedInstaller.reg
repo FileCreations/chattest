@@ -1,0 +1,9 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\*\shell\runas_trustedinstaller]
+@="Run as TrustedInstaller"
+"NoWorkingDirectory"=""
+"Icon"="%SystemRoot%\\System32\\imageres.dll,-27"
+
+[HKEY_CLASSES_ROOT\*\shell\runas_trustedinstaller\command]
+@="powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"C:\\Windows\\System32\\RunAsTrustedInstaller.ps1\" -filePath \"%1\""
