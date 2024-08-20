@@ -1,9 +1,0 @@
-Windows Registry Editor Version 5.00
-
-[HKEY_CLASSES_ROOT\exefile\shell\runas_system]
-@="Run as SYSTEM"
-"NoWorkingDirectory"=""
-"Icon"="%SystemRoot%\\System32\\shell32.dll,15"
-
-[HKEY_CLASSES_ROOT\exefile\shell\runas_system\command]
-@="C:\\Path\\To\\run_as_system_with_confirmation.bat \"%1\""
