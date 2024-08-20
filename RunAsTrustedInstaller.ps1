@@ -2,21 +2,27 @@ param (
     [string]$filePath
 )
 
-# Prompt the user for confirmation
-$confirmation = Read-Host "Are you sure you want to run $filePath as TrustedInstaller? (Y/N)"
-if ($confirmation -eq "Y") {
-    $serviceName = 'TrustedInstaller'
-    $service = Get-Service -Name $serviceName -ErrorAction Stop
+try {
+    # Prompt the user for confirmation
+    $confirmation = Read-Host "Are you sure you want to run $filePath as TrustedInstaller? (Y/N)"
+    if ($confirmation -eq "Y") {
+        $serviceName = 'TrustedInstaller'
+        $service = Get-Service -Name $serviceName -ErrorAction Stop
 
-    # Start the TrustedInstaller service if it's not running
-    if ($service.Status -ne 'Running') {
-        Start-Service -Name $serviceName
+        # Start the TrustedInstaller service if it's not running
+        if ($service.Status -ne 'Running') {
+            Start-Service -Name $serviceName
+        }
+
+        # Run the selected file as TrustedInstaller
+        Start-Process -FilePath "psexec.exe" -ArgumentList "-accepteula -s -i \"$filePath\"" -NoNewWindow -Wait
+    } else {
+        Write-Host "Operation canceled."
     }
-
-    # Run the selected file as TrustedInstaller
-    Start-Process -FilePath "psexec.exe" -ArgumentList "-accepteula -s -i \"$filePath\"" -NoNewWindow -Wait
-} else {
-    Write-Host "Operation canceled."
 }
-
-pause  # Keeps the window open to view the output
+catch {
+    Write-Host "An error occurred: $_"
+}
+finally {
+    pause  # Keeps the window open to view the output and any errors
+}
