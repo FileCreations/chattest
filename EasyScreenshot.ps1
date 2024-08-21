@@ -8,20 +8,25 @@ $outputFile = [System.IO.Path]::Combine($env:USERPROFILE, 'Pictures', "Screensho
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 $bounds = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
+
+# Ensure the directory exists before saving
+$directory = [System.IO.Path]::GetDirectoryName($outputFile)
+if (-not (Test-Path -Path $directory)) {
+    New-Item -ItemType Directory -Path $directory -Force
+}
+
+# Create the screenshot bitmap
 $screenshot = New-Object Drawing.Bitmap $bounds.Width, $bounds.Height
 $graphics = [Drawing.Graphics]::FromImage($screenshot)
 
 try {
     $graphics.CopyFromScreen($bounds.Location, [Drawing.Point]::Empty, $bounds.Size)
-
-    # Ensure the directory exists before saving
-    $directory = [System.IO.Path]::GetDirectoryName($outputFile)
-    if (-not (Test-Path -Path $directory)) {
-        New-Item -ItemType Directory -Path $directory -Force
-    }
-
-    $screenshot.Save($outputFile, [System.Drawing.Imaging.ImageFormat]::Png)
-
+    
+    # Workaround for GDI+ error: save to a MemoryStream first, then to a file
+    $memoryStream = New-Object System.IO.MemoryStream
+    $screenshot.Save($memoryStream, [System.Drawing.Imaging.ImageFormat]::Png)
+    $memoryStream.WriteTo([System.IO.File]::OpenWrite($outputFile))
+    
     # Notify the user
     [System.Windows.Forms.MessageBox]::Show("Screenshot saved to $outputFile")
 } catch {
