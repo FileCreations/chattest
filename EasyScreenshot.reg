@@ -2,8 +2,7 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\EasyScreenshot]
 @="Screenshot"
-"Icon"="%SystemRoot%\\System32\\wmploc.dll,-1001"
-"NoWorkingDirectory"=""
+"Icon"="%SystemRoot%\\System32\\imageres.dll,-108"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\EasyScreenshot\command]
-@="powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"C:\\Windows\\System32\\EasyScreenshot.ps1\""
+@="powershell.exe -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File \"C:\\Windows\\System32\\EasyScreenshot.ps1\""
