@@ -10,8 +10,16 @@ Add-Type -AssemblyName System.Drawing
 $bounds = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
 $screenshot = New-Object Drawing.Bitmap $bounds.Width, $bounds.Height
 $graphics = [Drawing.Graphics]::FromImage($screenshot)
-$graphics.CopyFromScreen($bounds.Location, [Drawing.Point]::Empty, $bounds.Size)
-$screenshot.Save($outputFile, [System.Drawing.Imaging.ImageFormat]::Png)
 
-# Notify the user
-[System.Windows.Forms.MessageBox]::Show("Screenshot saved to $outputFile")
+try {
+    $graphics.CopyFromScreen($bounds.Location, [Drawing.Point]::Empty, $bounds.Size)
+    $screenshot.Save($outputFile, [System.Drawing.Imaging.ImageFormat]::Png)
+
+    # Notify the user
+    [System.Windows.Forms.MessageBox]::Show("Screenshot saved to $outputFile")
+} catch {
+    [System.Windows.Forms.MessageBox]::Show("Failed to save screenshot: $_")
+} finally {
+    $graphics.Dispose()
+    $screenshot.Dispose()
+}
