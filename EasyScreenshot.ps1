@@ -2,7 +2,7 @@
 
 # Define the output file path
 $timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
-$outputFile = "$env:USERPROFILE\Pictures\Screenshot_$timestamp.png"
+$outputFile = [System.IO.Path]::Combine($env:USERPROFILE, 'Pictures', "Screenshot_$timestamp.png")
 
 # Take the screenshot
 Add-Type -AssemblyName System.Windows.Forms
@@ -13,6 +13,13 @@ $graphics = [Drawing.Graphics]::FromImage($screenshot)
 
 try {
     $graphics.CopyFromScreen($bounds.Location, [Drawing.Point]::Empty, $bounds.Size)
+
+    # Ensure the directory exists before saving
+    $directory = [System.IO.Path]::GetDirectoryName($outputFile)
+    if (-not (Test-Path -Path $directory)) {
+        New-Item -ItemType Directory -Path $directory -Force
+    }
+
     $screenshot.Save($outputFile, [System.Drawing.Imaging.ImageFormat]::Png)
 
     # Notify the user
