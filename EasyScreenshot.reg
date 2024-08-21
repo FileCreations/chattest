@@ -1,0 +1,9 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\EasyScreenshot]
+@="Screenshot"
+"Icon"="%SystemRoot%\\System32\\wmploc.dll,-1001"
+"NoWorkingDirectory"=""
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\EasyScreenshot\command]
+@="powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"C:\\Windows\\System32\\EasyScreenshot.ps1\""
